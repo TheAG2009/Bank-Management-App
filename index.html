@@ -3,27 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Management Application</title>
+    <title>Secure Bank Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <h1>🏦 Bank Management System</h1>
-        
-        <!-- Create Account Form -->
-        <div class="card">
-            <h3>Create New Account</h3>
-            <div class="input-group">
-                <input type="text" id="accName" placeholder="Full Name">
-                <input type="number" id="initialDeposit" placeholder="Initial Deposit ($)">
-                <button onclick="bankApp.createAccount()">Open Account</button>
-            </div>
+    <!-- Login Screen -->
+    <div id="login-overlay" class="overlay">
+        <div class="card login-card">
+            <h2>Secure Login</h2>
+            <input type="text" id="loginUser" placeholder="Username">
+            <input type="password" id="loginPass" placeholder="Password">
+            <button onclick="auth.login()">Sign In</button>
+            <p>Demo: admin / 1234</p>
         </div>
+    </div>
 
-        <!-- Transactions Section -->
-        <div class="card">
-            <h3>Transactions</h3>
-            <div class="input-group">
+    <!-- Main Application (Hidden by default) -->
+    <div id="main-app" class="app-container" style="display:none;">
+        <header class="main-header">
+            <div class="profile-section">
+                <img id="userPic" src="https://via.placeholder.com/50" alt="Profile">
+                <span id="welcomeMsg">Welcome, User</span>
+            </div>
+            <button class="logout-btn" onclick="auth.logout()">Logout</button>
+        </header>
+
+        <div class="dashboard">
+            <!-- Account Management -->
+            <div class="card">
+                <h3>Add New Customer</h3>
+                <input type="text" id="accName" placeholder="Full Name">
+                <input type="number" id="initialDeposit" placeholder="Initial Balance ($)">
+                <label for="profileInput" class="file-label">Upload Profile Photo</label>
+                <input type="file" id="profileInput" accept="image/*">
+                <button onclick="bankApp.createAccount()">Register Account</button>
+            </div>
+
+            <!-- Global Transaction -->
+            <div class="card">
+                <h3>Quick Transaction</h3>
                 <input type="number" id="targetId" placeholder="Account ID">
                 <input type="number" id="transAmount" placeholder="Amount ($)">
                 <div class="action-buttons">
@@ -35,10 +53,11 @@
 
         <!-- Records Table -->
         <div class="card">
-            <h3>Customer Records</h3>
+            <h3>System Database</h3>
             <table>
                 <thead>
                     <tr>
+                        <th>Photo</th>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Balance</th>
