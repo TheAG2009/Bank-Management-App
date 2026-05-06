@@ -1,81 +1,42 @@
-:root {
-    --primary: #2c3e50;
-    --success: #27ae60;
-    --danger: #e74c3c;
-    --light: #ecf0f1;
-}
+/* ... keep previous styles ... */
 
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
+.overlay {
+    position: fixed;
+    top:0; left:0; width: 100%; height: 100%;
+    background: var(--primary);
     display: flex;
     justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-.app-container {
-    width: 90%;
-    max-width: 800px;
-    margin-top: 50px;
-}
+.login-card { width: 300px; text-align: center; }
 
-h1 { color: var(--primary); text-align: center; }
-
-.card {
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: white;
-    padding: 20px;
+    padding: 10px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.profile-section { display: flex; align-items: center; gap: 15px; }
+
+#userPic, .row-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--success);
 }
 
-input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-button {
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    background: var(--primary);
-    color: white;
-}
-
-.action-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.btn-deposit { background: var(--success); }
-.btn-withdraw { background: var(--danger); }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
+.file-label {
+    display: block;
+    font-size: 12px;
     margin-top: 10px;
+    color: #666;
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.delete-btn {
-    background: none;
-    color: var(--danger);
-    cursor: pointer;
-    border: 1px solid var(--danger);
-    padding: 4px 8px;
-}
+.logout-btn { background: #7f8c8d; width: auto; padding: 5px 15px; }
