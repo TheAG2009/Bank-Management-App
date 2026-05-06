@@ -3,71 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Bank Pro</title>
+    <title>Quantum Bank | Ultimate Management Suite</title>
+    <!-- External Assets for a Professional Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="login-overlay" class="overlay">
-        <div class="card login-card">
-            <h2>Secure Login</h2>
-            <input type="text" id="loginUser" placeholder="Username">
-            <input type="password" id="loginPass" placeholder="Password">
-            <button onclick="auth.login()">Sign In</button>
-            <p>Demo: admin / 1234</p>
+
+    <!-- Auth Overlay -->
+    <div id="auth-layer" class="glass-morph">
+        <div class="auth-card fade-in">
+            <i class="fas fa-shield-halved fa-3x pulse"></i>
+            <h2>Quantum Systems</h2>
+            <p>Identity Verification Required</p>
+            <input type="text" id="user" placeholder="Username">
+            <input type="password" id="pass" placeholder="Password">
+            <button onclick="System.login()">Access Terminal</button>
         </div>
     </div>
 
-    <!-- Main Application (Hidden by default) -->
-    <div id="main-app" class="app-container" style="display:none;">
-        <header class="main-header">
-            <div class="profile-section">
-                <img id="userPic" src="https://via.placeholder.com/50" alt="Profile">
-                <span id="welcomeMsg">Welcome, User</span>
+    <div id="app" class="hidden">
+        <nav class="sidebar">
+            <div class="logo">QB</div>
+            <div class="nav-links">
+                <i class="fas fa-chart-line active" title="Dashboard"></i>
+                <i class="fas fa-users" title="Customers"></i>
+                <i class="fas fa-history" title="Audit Log"></i>
             </div>
-            <button class="logout-btn" onclick="auth.logout()">Logout</button>
-        </header>
+            <button class="logout" onclick="location.reload()"><i class="fas fa-power-off"></i></button>
+        </nav>
 
-        <div class="dashboard">
-            <!-- Account Management -->
-            <div class="card">
-                <h3>Add New Customer</h3>
-                <input type="text" id="accName" placeholder="Full Name">
-                <input type="number" id="initialDeposit" placeholder="Initial Balance ($)">
-                <label for="profileInput" class="file-label">Upload Profile Photo</label>
-                <input type="file" id="profileInput" accept="image/*">
-                <button onclick="bankApp.createAccount()">Register Account</button>
-            </div>
+        <main class="content">
+            <header>
+                <h1>Command Center</h1>
+                <div class="stats-bar">
+                    <div class="stat-item">Total Liquidity: <span id="total-val">$0.00</span></div>
+                </div>
+            </header>
 
-            <!-- Global Transaction -->
-            <div class="card">
-                <h3>Quick Transaction</h3>
-                <input type="number" id="targetId" placeholder="Account ID">
-                <input type="number" id="transAmount" placeholder="Amount ($)">
-                <div class="action-buttons">
-                    <button class="btn-deposit" onclick="bankApp.handleTransaction('deposit')">Deposit</button>
-                    <button class="btn-withdraw" onclick="bankApp.handleTransaction('withdraw')">Withdraw</button>
+            <div class="grid">
+                <!-- Registration -->
+                <div class="panel slide-up">
+                    <h3><i class="fas fa-user-plus"></i> Onboard Customer</h3>
+                    <div class="input-stack">
+                        <div class="photo-upload">
+                            <img id="preview" src="https://via.placeholder.com/100" alt="Profile">
+                            <input type="file" id="photo" accept="image/*" hidden>
+                            <label for="photo">Choose Portrait</label>
+                        </div>
+                        <input type="text" id="name" placeholder="Legal Name">
+                        <input type="number" id="init-dep" placeholder="Initial Deposit">
+                        <button class="btn-main" onclick="System.addAccount()">Execute Registration</button>
+                    </div>
+                </div>
+
+                <!-- Operations -->
+                <div class="panel slide-up delay-1">
+                    <h3><i class="fas fa-exchange-alt"></i> Vault Operations</h3>
+                    <div class="input-stack">
+                        <input type="number" id="target-id" placeholder="Account ID (e.g. 1001)">
+                        <input type="number" id="amount" placeholder="Currency Amount">
+                        <div class="dual-btns">
+                            <button class="btn-dep" onclick="System.transact('dep')">Deposit</button>
+                            <button class="btn-draw" onclick="System.transact('draw')">Withdraw</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Records Table -->
-        <div class="card">
-            <h3>System Database</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Balance</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="recordBody"></tbody>
-            </table>
-        </div>
+            <!-- Database -->
+            <div class="panel slide-up delay-2">
+                <h3><i class="fas fa-database"></i> Customer Database</h3>
+                <div class="table-scroll">
+                    <table id="bank-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>ID</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
