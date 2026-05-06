@@ -3,53 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex Bank Management</title>
+    <title>Bank Management Application</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Bank Management System</h1>
+    <div class="app-container">
+        <h1>🏦 Bank Management System</h1>
         
-        <!-- Account Creation Section -->
-        <section id="creation-section">
+        <!-- Create Account Form -->
+        <div class="card">
             <h3>Create New Account</h3>
-            <input type="text" id="userName" placeholder="Account Holder Name">
-            <input type="number" id="initialDeposit" placeholder="Initial Deposit ($)">
-            <button onclick="createAccount()">Open Account</button>
-        </section>
-
-        <hr>
-
-        <!-- Transaction Section -->
-        <section id="transaction-section">
-            <h3>Transactions</h3>
-            <input type="number" id="targetAccount" placeholder="Account ID">
-            <input type="number" id="amount" placeholder="Amount ($)">
-            <div class="btn-group">
-                <button class="dep-btn" onclick="handleTransaction('deposit')">Deposit</button>
-                <button class="draw-btn" onclick="handleTransaction('withdraw')">Withdraw</button>
+            <div class="input-group">
+                <input type="text" id="accName" placeholder="Full Name">
+                <input type="number" id="initialDeposit" placeholder="Initial Deposit ($)">
+                <button onclick="bankApp.createAccount()">Open Account</button>
             </div>
-        </section>
+        </div>
 
-        <hr>
+        <!-- Transactions Section -->
+        <div class="card">
+            <h3>Transactions</h3>
+            <div class="input-group">
+                <input type="number" id="targetId" placeholder="Account ID">
+                <input type="number" id="transAmount" placeholder="Amount ($)">
+                <div class="action-buttons">
+                    <button class="btn-deposit" onclick="bankApp.handleTransaction('deposit')">Deposit</button>
+                    <button class="btn-withdraw" onclick="bankApp.handleTransaction('withdraw')">Withdraw</button>
+                </div>
+            </div>
+        </div>
 
-        <!-- Data Display Section -->
-        <section id="display-section">
+        <!-- Records Table -->
+        <div class="card">
             <h3>Customer Records</h3>
-            <table id="accountTable">
+            <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Balance</th>
-                        <th>Actions</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="accountData">
-                    <!-- Data will be injected here by script.js -->
-                </tbody>
+                <tbody id="recordBody"></tbody>
             </table>
-        </section>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
