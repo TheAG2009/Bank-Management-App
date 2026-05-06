@@ -3,97 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Bank | Ultimate Management Suite</title>
-    <!-- External Assets for a Professional Look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Quantum Bank | Secure Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Auth Overlay -->
-    <div id="auth-layer" class="glass-morph">
-        <div class="auth-card fade-in">
-            <i class="fas fa-shield-halved fa-3x pulse"></i>
-            <h2>Quantum Systems</h2>
-            <p>Identity Verification Required</p>
-            <input type="text" id="user" placeholder="Username">
-            <input type="password" id="pass" placeholder="Password">
-            <button onclick="System.login()">Access Terminal</button>
+    <!-- Auth Shield -->
+    <div id="auth-screen" class="overlay">
+        <div class="glass-card fade-in">
+            <i class="fas fa-fingerprint fa-4x pulse"></i>
+            <h2>System Authentication</h2>
+            <div class="input-box">
+                <input type="text" id="user" placeholder="Username" required>
+                <input type="password" id="pass" placeholder="Access Code" required>
+            </div>
+            <button class="prime-btn" onclick="UI.attemptLogin()">Initialize Session</button>
+            <p class="hint">Default: admin / 1234</p>
         </div>
     </div>
 
-    <div id="app" class="hidden">
-        <nav class="sidebar">
-            <div class="logo">QB</div>
-            <div class="nav-links">
-                <i class="fas fa-chart-line active" title="Dashboard"></i>
-                <i class="fas fa-users" title="Customers"></i>
-                <i class="fas fa-history" title="Audit Log"></i>
+    <!-- Main Banking OS -->
+    <div id="app-shell" class="hidden">
+        <nav class="top-nav">
+            <div class="brand">QUANTUM<span>VAULT</span></div>
+            <div class="user-info">
+                <span id="session-user">Admin</span>
+                <button onclick="location.reload()" class="exit-btn"><i class="fas fa-sign-out-alt"></i></button>
             </div>
-            <button class="logout" onclick="location.reload()"><i class="fas fa-power-off"></i></button>
         </nav>
 
-        <main class="content">
-            <header>
-                <h1>Command Center</h1>
-                <div class="stats-bar">
-                    <div class="stat-item">Total Liquidity: <span id="total-val">$0.00</span></div>
+        <div class="main-layout">
+            <aside class="controls">
+                <div class="card">
+                    <h3><i class="fas fa-user-plus"></i> New Client</h3>
+                    <div class="photo-zone">
+                        <img id="prev" src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile">
+                        <input type="file" id="photo-input" hidden accept="image/*">
+                        <button onclick="document.getElementById('photo-input').click()">Upload Photo</button>
+                    </div>
+                    <input type="text" id="new-name" placeholder="Client Name">
+                    <input type="number" id="new-bal" placeholder="Opening Balance ($)">
+                    <button class="action-btn" onclick="Core.register()">Confirm Registry</button>
                 </div>
-            </header>
 
-            <div class="grid">
-                <!-- Registration -->
-                <div class="panel slide-up">
-                    <h3><i class="fas fa-user-plus"></i> Onboard Customer</h3>
-                    <div class="input-stack">
-                        <div class="photo-upload">
-                            <img id="preview" src="https://via.placeholder.com/100" alt="Profile">
-                            <input type="file" id="photo" accept="image/*" hidden>
-                            <label for="photo">Choose Portrait</label>
-                        </div>
-                        <input type="text" id="name" placeholder="Legal Name">
-                        <input type="number" id="init-dep" placeholder="Initial Deposit">
-                        <button class="btn-main" onclick="System.addAccount()">Execute Registration</button>
+                <div class="card">
+                    <h3><i class="fas fa-cash-register"></i> Terminal</h3>
+                    <input type="number" id="target-id" placeholder="Account ID">
+                    <input type="number" id="amount" placeholder="Amount">
+                    <div class="btn-row">
+                        <button class="dep-btn" onclick="Core.transact('deposit')">Deposit</button>
+                        <button class="wd-btn" onclick="Core.transact('withdraw')">Withdraw</button>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="display-area">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <small>Total Assets</small>
+                        <h2 id="total-assets">$0.00</h2>
+                    </div>
+                    <div class="stat-card">
+                        <small>Active Clients</small>
+                        <h2 id="client-count">0</h2>
                     </div>
                 </div>
 
-                <!-- Operations -->
-                <div class="panel slide-up delay-1">
-                    <h3><i class="fas fa-exchange-alt"></i> Vault Operations</h3>
-                    <div class="input-stack">
-                        <input type="number" id="target-id" placeholder="Account ID (e.g. 1001)">
-                        <input type="number" id="amount" placeholder="Currency Amount">
-                        <div class="dual-btns">
-                            <button class="btn-dep" onclick="System.transact('dep')">Deposit</button>
-                            <button class="btn-draw" onclick="System.transact('draw')">Withdraw</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Database -->
-            <div class="panel slide-up delay-2">
-                <h3><i class="fas fa-database"></i> Customer Database</h3>
-                <div class="table-scroll">
-                    <table id="bank-table">
+                <div class="table-container card">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Client</th>
                                 <th>ID</th>
                                 <th>Balance</th>
-                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="rows"></tbody>
+                        <tbody id="client-rows"></tbody>
                     </table>
                 </div>
-            </div>
-        </main>
+            </section>
+        </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
