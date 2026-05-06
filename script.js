@@ -1,97 +1,110 @@
-// --- OOP: Account Class ---
+// --- Authentication Logic ---
+const auth = {
+    login() {
+        const u = document.getElementById('loginUser').value;
+        const p = document.getElementById('loginPass').value;
+        if(u === "admin" && p === "1234") {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('welcomeMsg').innerText = `Admin: ${u}`;
+        } else {
+            alert("Invalid Credentials");
+        }
+    },
+    logout() {
+        location.reload();
+    }
+};
+
+// --- Account Class with Photo ---
 class Account {
-    constructor(id, name, balance) {
+    constructor(id, name, balance, photo) {
         this.id = id;
         this.name = name;
         this.balance = parseFloat(balance);
+        this.photo = photo || "https://via.placeholder.com/50";
     }
-
-    deposit(amount) {
-        this.balance += parseFloat(amount);
-    }
-
-    withdraw(amount) {
-        if (amount <= this.balance) {
-            this.balance -= parseFloat(amount);
-            return true;
-        }
+    deposit(amt) { this.balance += amt; }
+    withdraw(amt) {
+        if(amt <= this.balance) { this.balance -= amt; return true; }
         return false;
     }
 }
 
-// --- Bank System Controller ---
 const bankApp = {
     accounts: [],
 
-    // Initialization: Load from "File Management" (LocalStorage)
     init() {
-        const savedData = localStorage.getItem('bank_records');
-        if (savedData) {
-            const rawData = JSON.parse(savedData);
-            // Re-instantiate objects to keep class methods
-            this.accounts = rawData.map(a => new Account(a.id, a.name, a.balance));
+        const data = localStorage.getItem('real_bank_db');
+        if(data) {
+            const raw = JSON.parse(data);
+            this.accounts = raw.map(a => new Account(a.id, a.name, a.balance, a.photo));
         }
         this.render();
     },
 
-    save() {
-        localStorage.setItem('bank_records', JSON.stringify(this.accounts));
-        this.render();
+    async createAccount() {
+        const name = document.getElementById('accName').value;
+        const bal = document.getElementById('initialDeposit').value;
+        const file = document.getElementById('profileInput').files[0];
+        
+        let photoData = "https://via.placeholder.com/50";
+
+        if(file) {
+            // Convert image to Base64 String for "File Storage"
+            photoData = await this.convertImage(file);
+        }
+
+        if(!name || !bal) return alert("Fill all fields");
+
+        const id = Math.floor(10000 + Math.random() * 90000);
+        this.accounts.push(new Account(id, name, bal, photoData));
+        this.save();
     },
 
-    createAccount() {
-        const name = document.getElementById('accName').value;
-        const deposit = document.getElementById('initialDeposit').value;
-
-        if (name === "" || deposit <= 0) return alert("Enter valid details");
-
-        const id = Math.floor(1000 + Math.random() * 9000); // Generate 4-digit ID
-        const newAcc = new Account(id, name, deposit);
-        
-        this.accounts.push(newAcc);
-        this.save();
-        
-        // Clear Inputs
-        document.getElementById('accName').value = "";
-        document.getElementById('initialDeposit').value = "";
+    convertImage(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+        });
     },
 
     handleTransaction(type) {
         const id = parseInt(document.getElementById('targetId').value);
-        const amount = parseFloat(document.getElementById('transAmount').value);
-        const account = this.accounts.find(a => a.id === id);
+        const amt = parseFloat(document.getElementById('transAmount').value);
+        const acc = this.accounts.find(a => a.id === id);
 
-        if (!account || isNaN(amount) || amount <= 0) return alert("Invalid ID or Amount");
+        if(!acc || isNaN(amt)) return alert("Invalid Account/Amount");
 
-        if (type === 'deposit') {
-            account.deposit(amount);
-        } else {
-            if (!account.withdraw(amount)) return alert("Insufficient Balance");
-        }
+        if(type === 'deposit') acc.deposit(amt);
+        else if(!acc.withdraw(amt)) return alert("Insufficient funds");
 
         this.save();
     },
 
-    deleteAccount(id) {
-        this.accounts = this.accounts.filter(a => a.id !== id);
-        this.save();
+    save() {
+        localStorage.setItem('real_bank_db', JSON.stringify(this.accounts));
+        this.render();
     },
 
     render() {
         const tbody = document.getElementById('recordBody');
-        tbody.innerHTML = "";
-        this.accounts.forEach(acc => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${acc.id}</td>
-                    <td>${acc.name}</td>
-                    <td>$${acc.balance.toFixed(2)}</td>
-                    <td><button class="delete-btn" onclick="bankApp.deleteAccount(${acc.id})">Close</button></td>
-                </tr>
-            `;
-        });
+        tbody.innerHTML = this.accounts.map(acc => `
+            <tr>
+                <td><img src="${acc.photo}" class="row-pic"></td>
+                <td>${acc.id}</td>
+                <td>${acc.name}</td>
+                <td>$${acc.balance.toFixed(2)}</td>
+                <td><button onclick="bankApp.delete(${acc.id})" style="background:red; padding:2px 5px;">X</button></td>
+            </tr>
+        `).join('');
+    },
+
+    delete(id) {
+        this.accounts = this.accounts.filter(a => a.id !== id);
+        this.save();
     }
 };
 
-// Start the app
 bankApp.init();
