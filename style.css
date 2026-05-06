@@ -1,42 +1,73 @@
-/* ... keep previous styles ... */
-
-.overlay {
-    position: fixed;
-    top:0; left:0; width: 100%; height: 100%;
-    background: var(--primary);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+:root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --red: #ef4444;
+    --text: #f8fafc;
 }
 
-.login-card { width: 300px; text-align: center; }
-
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+body {
+    margin: 0; font-family: 'Inter', sans-serif;
+    background: var(--bg); color: var(--text);
+    overflow-x: hidden;
 }
 
-.profile-section { display: flex; align-items: center; gap: 15px; }
-
-#userPic, .row-pic {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--success);
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.file-label {
-    display: block;
-    font-size: 12px;
-    margin-top: 10px;
-    color: #666;
+.slide-up { animation: fadeInUp 0.6s ease forwards; }
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+/* Layout */
+#app { display: flex; height: 100vh; }
+
+.sidebar {
+    width: 80px; background: #020617;
+    display: flex; flex-direction: column; align-items: center; padding: 20px 0;
+    border-right: 1px solid #334155;
 }
 
-.logout-btn { background: #7f8c8d; width: auto; padding: 5px 15px; }
+.content { flex: 1; padding: 40px; overflow-y: auto; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+
+.panel {
+    background: var(--card); border-radius: 16px; padding: 24px;
+    border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+}
+
+/* Photo Upload Styling */
+.photo-upload { text-align: center; margin-bottom: 15px; }
+.photo-upload img {
+    width: 80px; height: 80px; border-radius: 50%;
+    border: 3px solid var(--accent); object-fit: cover;
+    margin-bottom: 10px;
+}
+.photo-upload label {
+    display: block; font-size: 12px; color: var(--accent); cursor: pointer;
+}
+
+/* Input & Buttons */
+input {
+    width: 100%; background: #0f172a; border: 1px solid #334155;
+    padding: 12px; border-radius: 8px; color: white; margin-bottom: 10px;
+}
+
+.btn-main { background: var(--accent); color: #000; width: 100%; font-weight: bold; border: none; padding: 12px; border-radius: 8px; cursor: pointer;}
+.btn-dep { background: var(--green); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; flex: 1;}
+.btn-draw { background: var(--red); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; flex: 1;}
+.dual-btns { display: flex; gap: 10px; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th { text-align: left; color: #94a3b8; font-size: 13px; padding: 10px; }
+td { padding: 15px 10px; border-top: 1px solid #334155; }
+.client-cell { display: flex; align-items: center; gap: 10px; }
+.row-img { width: 35px; height: 35px; border-radius: 50%; }
+
+.hidden { display: none !important; }
